@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+
 import MovieCard from "@/components/movies/movies";
 import Footer from "@/components/footer/footer";
 import Pagination from "@/components/pagination/pagination";
 
-
-
 const ITEMS_PER_PAGE = 8;
+
 export default function Home() {
   interface Movie {
     image: string;
@@ -16,6 +16,7 @@ export default function Home() {
     year: number;
   }
   const router = useRouter();
+
   const movies: Movie[] = [
     {
       image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQayQuUkQCIf9i3kdrsBg1UKAXF3OB2PX0JkQ&usqp=CAU',  
@@ -151,12 +152,15 @@ export default function Home() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
   return (
     <main className="bg-[#003645] text-white">
-
       <div className="container mx-auto flex justify-between items-center text-white text-[38px] font-bold pt-[50px] pb-[50px ]">
         <div className="text-left">
           <p className="">My Movies </p>
+
+          {/* TODO: add icon to create new movies */}
+
         </div>
         <div className="text-right">
           <button onClick={() => router.push('/')} className="text-lg">Logout</button>
@@ -172,30 +176,28 @@ export default function Home() {
                   <MovieCard image={movie.image} title={movie.title} year={movie.year} />
                 </div>
               ))}
-
             </div>
           </div>
+
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
           />
-
-
-
-        </div> :
-        <div className="text-center mt-[300px] mb-[300px] font-bold">
-          <h1 className=" text-[56px]">
-            Your Movie list is empty
-          </h1>
-          <button
-            onClick={() => router.push('/movie/create')}
-            type="submit"
-            className="px-4 py-2 bg-green-500 w-[200px] h-[60px] text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 ml-2 mt-[20px]"
-          >
-            Add a new movie
-          </button>
-        </div>}
+        </div> : (
+          <div className="text-center mt-[300px] mb-[300px] font-bold">
+            <h1 className=" text-[56px]">
+              Your Movie list is empty
+            </h1>
+            <button
+              onClick={() => router.push('/movie/create')}
+              type="submit"
+              className="px-4 py-2 bg-green-500 w-[200px] h-[60px] text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 ml-2 mt-[20px]"
+            >
+              Add a new movie
+            </button>
+          </div>
+        )}
       <Footer />
     </main>
   );

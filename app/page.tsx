@@ -4,13 +4,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Footer from "@/components/footer/footer";
 
-
-
 export default function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
-
 
   const router = useRouter();
 
@@ -22,44 +19,50 @@ export default function Home() {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Simple validation example
     const newErrors: { email?: string; password?: string } = {};
-    if (!email.includes('@')) {
+    
+    if (!email.includes('@'))
       newErrors.email = 'Invalid email address';
-    }
-    if (password.length < 6) {
+
+    if (password.length < 6)
       newErrors.password = 'Password must be at least 6 characters long';
-    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      // Handle successful submission (e.g., send data to API)
-      console.log('Form submitted:', { email, password });
-      if(email=="test@gmail.com"&&password=="test123"){
-        router.push('/movies')
-      setEmail('');
-      setPassword('');
-      setErrors({});
-    }
-    else{
-      newErrors.email = 'Invalid Credentials';
-      newErrors.password = 'Invalid Credentials';
-    }
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          router.push('/movies');
+        } else {
+          setErrors({ email: data.error, password: data.error });
+        }
+      } catch (error) {
+        console.error('Error logging in:', error);
+        setErrors({ email: 'An unexpected error occurred', password: 'An unexpected error occurred' });
+      }
     }
   };
-
 
   return (
     <main className="bg-[#003645] text-white pt-[20px]">
       <div className="text-center mt-[250px] mb-[250px] font-bold">
         <div className="max-w-md mx-auto p-4  w-[400px]">
           <h2 className="text-[72px] font-bold mb-[30px]">Sign in</h2>
-          <form className="space-y-4" onSubmit={handleSubmit} >
-
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <input
                 id="email"
@@ -89,10 +92,10 @@ export default function Home() {
                 <span
                   className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"
-                    stroke="currentColor" stroke-width="1">
-                    <path fill-rule="evenodd"
+                    stroke="currentColor" strokeWidth="1">
+                    <path fillRule="evenodd"
                       d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clip-rule="evenodd"></path>
+                      clipRule="evenodd"></path>
                   </svg>
                 </span>
               </label>
