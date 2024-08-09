@@ -1,6 +1,6 @@
-movie-db-nextjs
+# movie-db-nextjs
 
-"Full stack web application for managing a movie database using React and Next.js. Features include user authentication, movie CRUD operations, pagination, and form validation. Deployed on AWS with responsive design and additional functionalities. Includes front-end and back-end code, with API documentation and best practices."
+Full stack web application for managing a movie database using React and Next.js. Features include user authentication, movie CRUD operations, pagination, and form validation. Deployed on AWS with responsive design and additional functionalities. Includes front-end and back-end code, with API documentation and best practices.
 
 ## Getting Started
 
